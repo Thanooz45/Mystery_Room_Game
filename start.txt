@@ -9,30 +9,46 @@ Prerequisites
 
 One-time setup (macOS — Terminal)
 ---------------------------------
-1. From the project folder:
+1. Install and open Docker Desktop for Mac. Wait until Docker Desktop says
+   the engine is running. This project uses Docker only for local MongoDB.
+
+2. From the project folder, install dependencies:
+
+   npm ci
+
+3. If you do not already have a .env file, create one:
 
    cp .env.example .env
 
-2. Open .env and set GEMINI_API_KEY. Keep the local values for
-   MONGODB_URI, CLIENT_ORIGIN, and COOKIE_SECURE.
+   Open it and set GEMINI_API_KEY. Keep the local MONGODB_URI,
+   CLIENT_ORIGIN, and COOKIE_SECURE values. PORT should be 5001;
+   macOS Control Center commonly occupies port 5000.
 
    open -e .env
 
-3. Install packages and start MongoDB:
+4. Start the local MongoDB database:
 
-   npm install
    docker compose -f compose.local.yaml up -d
+
+   Check that it is running:
+
+   docker compose -f compose.local.yaml ps
 
 Start the app (macOS)
 ---------------------
-From the project folder, run:
+From the project folder, start both the API and frontend:
 
    npm run dev
 
-Open http://localhost:5173 in your browser. The Express API runs on
-http://localhost:5000. Stop the app with Control+C. Stop local MongoDB with:
+Open http://localhost:5173 in your browser. The API runs on
+http://localhost:5001. Nodemon watches the server and restarts it when
+server files change. Stop the app with Control+C. Stop MongoDB with:
 
    docker compose -f compose.local.yaml down
+
+If you see EADDRINUSE, keep PORT=5001 in .env and restart npm run dev.
+The Vite API proxy reads that same PORT setting. If port 5001 is also in
+use, change PORT in .env to another unused port and restart the app.
 
 One-time setup (Windows — PowerShell)
 -------------------------------------
@@ -57,7 +73,7 @@ From the project folder, run:
    npm run dev
 
 Open http://localhost:5173 in your browser. The Express API runs on
-http://localhost:5000. Stop the app with Ctrl+C. Stop local MongoDB with:
+http://localhost:5001. Stop the app with Ctrl+C. Stop local MongoDB with:
 
    docker compose -f compose.local.yaml down
 
@@ -106,9 +122,9 @@ Deploy to Vercel (frontend) and Render (API)
 4. After Render deploys, copy its HTTPS service origin, for example
    https://casefile-api.onrender.com.
 5. Import the same repository into Vercel. Use the project root, Vite,
-   build command npm run build, and output directory dist. Add the Vercel
-   environment variable RENDER_API_ORIGIN with the Render origin only (no
-   /api/v1 suffix) before deploying.
+   build command npm run build, and output directory dist. The root
+   vercel.json already configures the Render API rewrite and SPA fallback;
+   no Vercel API-origin environment variable is needed.
 6. Deploy Vercel. Make sure the final Vercel URL exactly matches CLIENT_ORIGIN
    on Render. If it differs, update CLIENT_ORIGIN in Render and redeploy there.
 7. Check https://your-project.vercel.app/api/v1/health and then register and
@@ -133,6 +149,6 @@ Terminal 2 — Frontend (Vite):
    npm run dev:client
 
 Open the frontend at http://localhost:5173. The backend API runs at
-http://localhost:5000. Alternatively, start both terminals with one command:
+http://localhost:5001. Alternatively, start both terminals with one command:
 
    npm run dev
