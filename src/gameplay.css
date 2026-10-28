@@ -1,0 +1,66 @@
+.hint-card,
+.score-card {
+  border: 1px solid #dfded7;
+  border-radius: 12px;
+  background: #fffefa;
+  padding: 22px;
+}
+
+.hint-card {
+  margin-top: 30px;
+}
+
+.hint-card .side-heading {
+  margin-bottom: 12px;
+}
+
+.hint-text {
+  display: grid;
+  gap: 6px;
+  margin: 14px 0;
+  padding: 14px;
+  border-left: 2px solid #a68b5b;
+  background: #f6f5f0;
+  line-height: 1.6;
+}
+
+.hint-text span {
+  @apply font-mono uppercase tracking-wider;
+  color: #77766f;
+  font: 11px 'DM Mono', monospace;
+  letter-spacing: 0.08em;
+}
+
+.hint-card > button {
+  margin-top: 8px;
+}
+
+.score-card {
+  display: grid;
+  justify-items: center;
+  margin: 24px 0;
+}
+
+.score-card strong {
+  margin: 5px 0 0;
+  font: 600 48px 'Playfair Display', serif;
+}
+
+.score-card > span:last-of-type {
+  color: #77766f;
+  font-size: 13px;
+}
+
+.score-card p {
+  margin: 12px 0 0;
+  color: #68675f;
+  font-size: 13px;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .hint-card,
+  .score-card {
+    padding: 16px;
+  }
+}
